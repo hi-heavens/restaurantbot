@@ -95,7 +95,7 @@ io.on("connection", (socket) => {
           `Cheers! ${msg.userMealName} has been put in your shopping cart...`,
         ];
         if (msg.input === "1") {
-          cartItem.push(msg["checkOut"].amount); //.push(userMeal["amount"]);
+          cartItem.push(msg["checkOut"].amount); 
         } else if (msg.input === "2") {
           cartItem.push(msg["checkOut"].amount + msg["checkOut"]["special"][2]);
         } else {
@@ -110,11 +110,13 @@ io.on("connection", (socket) => {
         socket.emit("admin-message", checkOutMessage);
       } else if (msg.cart) {
         if (msg.input === "99") {
+          msg["history"] = msg.cart;
+          msg["cart"] = null;
           socket.emit("admin-message", ["Order placed!!!", "Cheers!"]);
         } else if (msg.input === "98") {
           socket.emit("admin-message", ["Order history!!!", "Cheers!"]);
         } else if (msg.input === "97") {
-          socket.emit("admin-message", ["Current order!!!", "Cheers!"]);
+          socket.emit("admin-message", ["Current order:", msg.cart]);
         } else if (msg.input === "0") {
           socket.emit("admin-message", ["Order cancelled!!!", "Cheers!"]);
           msg.cart = null;
