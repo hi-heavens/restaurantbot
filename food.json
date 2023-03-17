@@ -1,0 +1,71 @@
+{
+    "Bacon cheeseburger": {
+        "special": [
+            true,
+            "fries",
+            100
+        ],
+        "amount": 500
+    },
+    "Chicken alfredo pasta": {
+        "special": [
+            false,
+            "No special"
+        ],
+        "amount": 250
+    },
+    "Caesar salad": {
+        "special": [
+            true,
+            "grilled chicken",
+            120
+        ],
+        "amount": 500
+    },
+    "Margherita pizza": {
+        "special": [
+            true,
+            "fresh basil",
+            120
+        ],
+        "amount": 500
+    },
+    "Fish and chips": {
+        "special": [
+            true,
+            "tartar sauce",
+            120
+        ],
+        "amount": 500
+    },
+    "Grilled salmon": {
+        "special": [
+            true,
+            "mixed vegetables",
+            120
+        ],
+        "amount": 500
+    },
+    "New York-style cheesecake": {
+        "special": [
+            false,
+            "No special"
+        ]
+    },
+    "Chocolate lava cake": {
+        "special": [
+            true,
+            "vanilla ice cream",
+            120
+        ],
+        "amount": 500
+    },
+    "Chicken wings": {
+        "special": [
+            true,
+            "ranch dressing",
+            120
+        ],
+        "amount": 500
+    }
+}
