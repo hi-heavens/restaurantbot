@@ -99,7 +99,10 @@ io.on("connection", (socket) => {
         } else if (msg.input === "2") {
           cartItem.push(msg["checkOut"].amount + msg["checkOut"]["special"][2]);
         } else {
-          socket.emit("admin-message", ["Invalid input", "Select 1 or 2 to continue"]);
+          socket.emit("admin-message", [
+            "Invalid input",
+            "Select 1 or 2 to continue",
+          ]);
           return;
         }
         msg["cart"] = cartItem;
@@ -108,10 +111,22 @@ io.on("connection", (socket) => {
       } else if (msg.cart) {
         if (msg.input === "99") {
           socket.emit("admin-message", ["Order placed!!!", "Cheers!"]);
+        } else if (msg.input === "98") {
+          socket.emit("admin-message", ["Order history!!!", "Cheers!"]);
+        } else if (msg.input === "97") {
+          socket.emit("admin-message", ["Current order!!!", "Cheers!"]);
         } else if (msg.input === "0") {
           socket.emit("admin-message", ["Order cancelled!!!", "Cheers!"]);
           msg.cart = null;
+        } else {
+          socket.emit("admin-message", [
+            "Invalid input",
+            "Select 1 or 2 to continue",
+          ]);
+          return;
         }
+      } else if (!msg.cart || !msg.history) {
+        socket.emit("admin-message", ["Oops", "Your cart is empty!!!"]);
       }
     }
     socket.emit("saveToStorage", msg);
