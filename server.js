@@ -3,7 +3,7 @@ const path = require("path");
 const socketio = require("socket.io");
 const dotenv = require("dotenv");
 const express = require("express");
-const session = require("express-session");
+const session = require("cookie-session");
 dotenv.config({ path: "./config.env" });
 const foodList = require("./food.json");
 
