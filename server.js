@@ -57,6 +57,7 @@ io.on("connection", (socket) => {
   socket.on("chatMessage", (msg) => {
     let userMealName = "";
     let cart = [];
+    let userMeal = {};
     if (session === msg.session) {
       socket.emit("userMessage", msg);
       if (msg.input === "1" && !msg.action) {
@@ -65,7 +66,7 @@ io.on("connection", (socket) => {
         console.log("Select menu item");
       } else if (msg.action === "subMenu" && !msg.checkOut) {
         userMealName = msg.MENU[parseInt(msg.input) - 1];
-        let userMeal = foodList[userMealName];
+        userMeal = foodList[userMealName];
         // { special: [ true, 'fries', 100 ], amount: 500 }
         let isSpecial = userMeal["special"];
         let toSelect = [userMealName];
@@ -83,39 +84,29 @@ io.on("connection", (socket) => {
             `Select 1 to checkout, total price - #${userMeal.amount}`
           );
         }
-        msg["checkOut"] = "check";
+        msg["checkOut"] = userMeal;
         msg["userMealName"] = userMealName;
         socket.emit("admin-message", toSelect);
         console.log("Sub menu item selected");
-      } else if (msg.checkOut && msg.action) {
+      } else if (msg.checkOut && msg.action === "subMenu") {
+        let cart = [];
+        let cartItem = [msg.userMealName];
         let checkOutMessage = [
           `Cheers! ${msg.userMealName} has been put in your shopping cart...`,
         ];
         if (msg.input === "1") {
-          cart.push();
+          cartItem.push(msg["checkOut"].amount); //.push(userMeal["amount"]);
         } else if (msg.input === "2") {
-        } else {
+          cartItem.push(msg["checkOut"].amount + msg["checkOut"]["special"][2]);
         }
+        msg["cart"] = cartItem;
+        msg["action"] = "welcomeList";
         socket.emit("admin-message", checkOutMessage);
-        console.log("Payment option selected");
+      } else if (msg.cart) {
+        if (msg.input === "99") {
+          socket.emit("admin-message", ["Order placed!!!", "Cheers!"]);
+        }
       }
-      /*(
-            (foodChoice[1] = `Select 1 without ${special} - price = ${customerFood.amount}`)
-          )),
-            (foodChoice[2] = `Select 2 with ${special} - add. #${customerFood.special[2]}`);
-        } else {
-          foodChoice[1] = `total price - #${customerFood.amount}`;
-        }
-        if (isSpecial) {
-          sum = userMeal.amount + userMeal.special[2];
-        } else {
-          sum = userMeal.amount;
-        }
-        const paymentOption = [
-          `Total amount to pay is ${sum}`,
-          "Select 1 to Pay",
-          "Select 0 to cancel order",
-        ];*/
     }
     socket.emit("saveToStorage", msg);
   });
