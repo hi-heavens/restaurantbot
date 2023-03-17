@@ -98,6 +98,9 @@ io.on("connection", (socket) => {
           cartItem.push(msg["checkOut"].amount); //.push(userMeal["amount"]);
         } else if (msg.input === "2") {
           cartItem.push(msg["checkOut"].amount + msg["checkOut"]["special"][2]);
+        } else {
+          socket.emit("admin-message", ["Invalid input", "Select 1 or 2 to continue"]);
+          return;
         }
         msg["cart"] = cartItem;
         msg["action"] = "welcomeList";
@@ -105,6 +108,9 @@ io.on("connection", (socket) => {
       } else if (msg.cart) {
         if (msg.input === "99") {
           socket.emit("admin-message", ["Order placed!!!", "Cheers!"]);
+        } else if (msg.input === "0") {
+          socket.emit("admin-message", ["Order cancelled!!!", "Cheers!"]);
+          msg.cart = null;
         }
       }
     }
