@@ -126,7 +126,7 @@ io.on("connection", (socket) => {
           return;
         }
       } else if (!msg.cart || !msg.history) {
-        socket.emit("admin-message", ["Oops", "Your cart is empty!!!"]);
+        socket.emit("admin-message", ["Oops", "Your cart/history is empty!!!"]);
       }
     }
     socket.emit("saveToStorage", msg);
