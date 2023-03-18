@@ -62,7 +62,7 @@ function displayAdminMessage(message) {
   }
   div.classList.add("message");
   div.innerHTML = `<p class="meta">${message.username} <span>${message.time}</span></p>
-  <ul id="items">
+  <ul class="items">
     ${list}
     </ul>`;
   document.querySelector("#chat-messages").appendChild(div);
