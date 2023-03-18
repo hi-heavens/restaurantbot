@@ -17,25 +17,20 @@ socket.on("admin-message", (message) => {
   displayAdminMessage(message);
 });
 
-// socket.on("history", (message) => {
-//   chatMessages.scrollTop = chatMessages.scrollHeight;
-//   displayMessage(message);
-// });
-
-socket.on("userMessage", (message) => {
+socket.on("history", (message) => {
   chatMessages.scrollTop = chatMessages.scrollHeight;
-  displayUserMessage(message);
+  displayAdminMessage(message);
 });
+
+// socket.on("userMessage", (message) => {
+//   chatMessages.scrollTop = chatMessages.scrollHeight;
+//   displayUserMessage(message);
+// });
 
 socket.on("menu", (message) => {
   chatMessages.scrollTop = chatMessages.scrollHeight;
   displayAdminMessage(message);
 });
-
-// socket.on("confirmPay", (message) => {
-//   chatMessages.scrollTop = chatMessages.scrollHeight;
-//   console.log(message);
-// });
 
 socket.on("saveToStorage", (message) => {
   chatMessages.scrollTop = chatMessages.scrollHeight;
@@ -57,6 +52,9 @@ sendMessage.addEventListener("submit", (e) => {
 function displayAdminMessage(message) {
   const div = document.createElement("div");
   let list = message.text;
+  if (msg.input === "98") {
+    list = `<p class="meta">Your Order history...</span></p>`;
+  }
   if (typeof message["text"] === "object") {
     list = "";
     for (let i = 0; i < message["text"].length; i++) {
@@ -70,29 +68,6 @@ function displayAdminMessage(message) {
     </ul>`;
   document.querySelector("#chat-messages").appendChild(div);
 }
-
-// function displayUserMessage(message) {
-//   const div = document.createElement("div");
-//   div.classList.add("message");
-//   div.innerHTML = `<p class="meta">${message.username} <span>${message.time}</span></p>
-//   <p id="item">
-//     ${message.text}
-//     </p>`;
-//   document.querySelector("#chat-messages").appendChild(div);
-// }
-// function displayMessage(message) {
-//   const div = document.createElement("div");
-//   let list = "";
-//   for (let i = 0; i < message.length; i++) {
-//     list += `<li>${message[i]}</li>`;
-//   }
-//   div.classList.add("message");
-//   div.innerHTML = `<p class="meta">${message.username} <span>${message.time}</span></p>
-//   <ul id="items">
-//     ${list}
-//     </ul>`;
-//   document.querySelector("#chat-messages").appendChild(div);
-// }
 
 function displayHistory(message) {
   const div = document.createElement("div");
