@@ -13,13 +13,13 @@ socket.on("welcome-message", (message) => {
 });
 
 socket.on("admin-message", (message) => {
-  chatMessages.scrollTop = chatMessages.scrollHeight;
   displayAdminMessage(message);
+  chatMessages.scrollTop = chatMessages.scrollHeight;
 });
 
 socket.on("history", (message) => {
-  chatMessages.scrollTop = chatMessages.scrollHeight;
   displayAdminMessage(message);
+  chatMessages.scrollTop = chatMessages.scrollHeight;
 });
 
 // socket.on("userMessage", (message) => {
@@ -28,8 +28,8 @@ socket.on("history", (message) => {
 // });
 
 socket.on("menu", (message) => {
-  chatMessages.scrollTop = chatMessages.scrollHeight;
   displayAdminMessage(message);
+  chatMessages.scrollTop = chatMessages.scrollHeight;
 });
 
 socket.on("saveToStorage", (message) => {

@@ -82,10 +82,21 @@ io.on("connection", (socket) => {
           // socket.emit("admin-message", ["Order history!!!", "Cheers!"]);
           socket.emit("history", formatMessage("admin", msg.history));
         }
-      } else if (msg.input === "97") {
-        console.log("Here")
+      } else if (msg.input === "99") {
         if (msg["cart"].length < 1) {
-          socket.emit("admin-message", formatMessage("admin", ["Oops", "Your cart is empty!!!"]));
+          socket.emit(
+            "admin-message",
+            formatMessage("admin", ["Oops", "Your cart is empty!!!"])
+          );
+        }
+        return;
+      } else if (msg.input === "97") {
+        console.log("Here");
+        if (msg["cart"].length < 1) {
+          socket.emit(
+            "admin-message",
+            formatMessage("admin", ["Oops", "Your cart is empty!!!"])
+          );
           console.log("Are you here");
           return;
         }
@@ -93,7 +104,24 @@ io.on("connection", (socket) => {
           "admin-message",
           formatMessage("admin", ["Current order:", msg.cart[-1]])
         );
-      } 
+        socket.emit(
+          "admin-message",
+          formatMessage("admin", ["Current order:", msg.cart[-1]])
+        );
+      } else if (msg.input === "0") {
+        if (msg["cart"].length < 1) {
+          socket.emit(
+            "admin-message",
+            formatMessage("admin", ["Oops", "Your cart is empty!!!"])
+          );
+          return;
+        }
+        socket.emit(
+          "admin-message",
+          formatMessage("admin", ["Order cancelled!!!", "Cheers!"])
+        );
+        msg.cart = [];
+      }
       if (msg.input === "1" && !msg.action) {
         msg["action"] = "subMenu";
         socket.emit("menu", formatMessage("admin", MENU));
@@ -169,7 +197,7 @@ io.on("connection", (socket) => {
             "admin-message",
             formatMessage("admin", ["Current order:", msg.cart[-1]])
           );
-        } */else if (msg.input === "0") {
+        } */ else if (msg.input === "0") {
           socket.emit(
             "admin-message",
             formatMessage("admin", ["Order cancelled!!!", "Cheers!"])
@@ -185,12 +213,12 @@ io.on("connection", (socket) => {
           );
           return;
         }*/
-      } else if (!msg.cart && msg.input === "99") {
+      } /*else if (!msg.cart && msg.input === "99") {
         socket.emit(
           "admin-message",
           formatMessage("admin", ["Oops", "Your cart is empty!!!"])
         );
-      }
+      }*/
     }
     // msg.formatTime = formatTime();
     socket.emit("saveToStorage", msg);
