@@ -6,6 +6,7 @@ const express = require("express");
 const session = require("cookie-session");
 dotenv.config({ path: "./config.env" });
 const foodList = require("./food.json");
+const formatMessage = require("./utils/time.js");
 
 const app = express();
 const server = http.createServer(app);
@@ -60,6 +61,7 @@ io.on("connection", (socket) => {
     input,
     MENU,
     history,
+    formatMessage: formatMessage("admin", welcomeList),
   });
 
   socket.on("chatMessage", (msg) => {
@@ -71,7 +73,7 @@ io.on("connection", (socket) => {
       socket.emit("userMessage", msg);
       if (msg.input === "1" && !msg.action) {
         msg["action"] = "subMenu";
-        socket.emit("menu", msg);
+        socket.emit("menu", formatMessage("admin", MENU));
         console.log("Select menu item");
       } else if (msg.action === "subMenu" && !msg.checkOut) {
         userMealName = msg.MENU[parseInt(msg.input) - 1];
@@ -95,7 +97,7 @@ io.on("connection", (socket) => {
         }
         msg["checkOut"] = userMeal;
         msg["userMealName"] = userMealName;
-        socket.emit("admin-message", toSelect);
+        socket.emit("admin-message", formatMessage("admin", toSelect));
         console.log("Sub menu item selected");
       } else if (msg.checkOut && msg.action === "subMenu") {
         let cart = [];
@@ -108,44 +110,48 @@ io.on("connection", (socket) => {
         } else if (msg.input === "2") {
           cartItem.push(msg["checkOut"].amount + msg["checkOut"]["special"][2]);
         } else {
-          socket.emit("admin-message", [
-            "Invalid input",
-            "Select 1 or 2 to continue",
-          ]);
+          socket.emit(
+            "admin-message",
+            formatMessage("admin", [
+              "Invalid input",
+              "Select 1 or 2 to continue",
+            ])
+          );
           return;
         }
         msg["cart"] = cartItem;
         msg["action"] = "welcomeList";
-        socket.emit("admin-message", checkOutMessage);
+        socket.emit("admin-message", formatMessage("admin", checkOutMessage));
       } else if (msg["cart"].length > 1 || msg["history"]) {
         console.log("Hereeeeeeeeeeeeee");
         if (msg.input === "99") {
           msg["history"].push(msg.cart);
           // msg["cart"] = null;
-          socket.emit("admin-message", ["Order placed!!!", "Cheers!"]);
+          socket.emit("admin-message", formatMessage("admin", ["Order placed!!!", "Cheers!"]));
         } else if (msg.input === "98") {
           if (msg.history.length === 0) {
-            socket.emit("admin-message", ["Oops", "Your history is empty!!!"]);
+            socket.emit("admin-message", formatMessage("admin", ["Oops", "Your history is empty!!!"]));
           } else {
             // socket.emit("admin-message", ["Order history!!!", "Cheers!"]);
-            socket.emit("admin-message", msg.history);
+            socket.emit("admin-message", formatMessage("admin", msg.history));
           }
         } else if (msg.input === "97") {
-          socket.emit("admin-message", ["Current order:", msg.cart[-1]]);
+          socket.emit("admin-message", formatMessage("admin", ["Current order:", msg.cart[-1]]));
         } else if (msg.input === "0") {
-          socket.emit("admin-message", ["Order cancelled!!!", "Cheers!"]);
+          socket.emit("admin-message", formatMessage("admin", ["Order cancelled!!!", "Cheers!"]));
           msg.cart = null;
         } else {
-          socket.emit("admin-message", [
+          socket.emit("admin-message", formatMessage("admin", [
             "Invalid input",
             "Select 1 or 2 to continue",
-          ]);
+          ]));
           return;
         }
       } else if (!msg.cart && msg.input === "99") {
-        socket.emit("admin-message", ["Oops", "Your cart is empty!!!"]);
+        socket.emit("admin-message", formatMessage("admin", ["Oops", "Your cart is empty!!!"]));
       }
     }
+    // msg.formatTime = formatTime();
     socket.emit("saveToStorage", msg);
   });
 });

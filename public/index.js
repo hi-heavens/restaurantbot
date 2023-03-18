@@ -1,6 +1,5 @@
 const socket = io();
 
-let userInput = "";
 const chatMessages = document.getElementById("chat-messages");
 const sendMessage = document.getElementById("chat-form");
 let response = {};
@@ -8,13 +7,14 @@ let response = {};
 let localResponse = {};
 
 socket.on("welcome-message", (message) => {
-  displayMessage(message.welcomeList);
+  displayAdminMessage(message.formatMessage);
   response = message;
   localStorage.setItem("response", JSON.stringify(message));
 });
 
 socket.on("admin-message", (message) => {
-  displayMessage(message);
+  displayAdminMessage(message);
+  console.log(message)
 //   response = message;
 });
 
@@ -28,7 +28,7 @@ socket.on("userMessage", (message) => {
 });
 
 socket.on("menu", (message) => {
-  displayMessage(message.MENU);
+  displayAdminMessage(message);
 });
 
 socket.on("confirmPay", (message) => {
@@ -54,6 +54,20 @@ sendMessage.addEventListener("submit", (e) => {
   console.log(msg);
 });
 
+function displayAdminMessage(message) {
+  const div = document.createElement("div");
+  let list = "";
+  for (let i = 0; i < message["text"].length; i++) {
+    list += `<li>${message["text"][i]}</li>`;
+  }
+  div.classList.add("message");
+  div.innerHTML = `<p class="meta">${message.username} <span>${message.time}</span></p>
+  <ul id="items">
+    ${list}
+    </ul>`;
+  document.querySelector("#chat-messages").appendChild(div);
+}
+
 function displayMessage(message) {
   const div = document.createElement("div");
   let list = "";
@@ -61,7 +75,7 @@ function displayMessage(message) {
     list += `<li>${message[i]}</li>`;
   }
   div.classList.add("message");
-  div.innerHTML = `<p class="meta">${"bot"} <span>${"time"}</span></p>
+  div.innerHTML = `<p class="meta">${message.username} <span>${message.time}</span></p>
   <ul id="items">
     ${list}
     </ul>`;

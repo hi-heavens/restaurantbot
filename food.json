@@ -50,7 +50,8 @@
         "special": [
             false,
             "No special"
-        ]
+        ],
+        "amount": 250
     },
     "Chocolate lava cake": {
         "special": [
