@@ -6,7 +6,7 @@ const express = require("express");
 const session = require("cookie-session");
 dotenv.config({ path: "./config.env" });
 const foodList = require("./food.json");
-const formatMessage = require("./utils/time.js");
+const formatMessage = require("./utils/formatMessage.js");
 
 const app = express();
 const server = http.createServer(app);
