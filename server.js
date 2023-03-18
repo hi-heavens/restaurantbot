@@ -37,6 +37,8 @@ const MENU = [
   "Chicken wings",
 ];
 
+let history = [];
+
 const sessionMiddleWare = session({
   secret: process.env.SECRET,
   resave: false,
@@ -52,11 +54,18 @@ io.on("connection", (socket) => {
   console.log("a user connected", socket.id);
   let session = socket.id;
   let input = "";
-  socket.emit("welcome-message", { welcomeList, session, input, MENU });
+  socket.emit("welcome-message", {
+    welcomeList,
+    session,
+    input,
+    MENU,
+    history,
+  });
 
   socket.on("chatMessage", (msg) => {
     let userMealName = "";
     let cart = [];
+
     let userMeal = {};
     if (session === msg.session) {
       socket.emit("userMessage", msg);
@@ -95,7 +104,7 @@ io.on("connection", (socket) => {
           `Cheers! ${msg.userMealName} has been put in your shopping cart...`,
         ];
         if (msg.input === "1") {
-          cartItem.push(msg["checkOut"].amount); 
+          cartItem.push(msg["checkOut"].amount);
         } else if (msg.input === "2") {
           cartItem.push(msg["checkOut"].amount + msg["checkOut"]["special"][2]);
         } else {
@@ -108,15 +117,21 @@ io.on("connection", (socket) => {
         msg["cart"] = cartItem;
         msg["action"] = "welcomeList";
         socket.emit("admin-message", checkOutMessage);
-      } else if (msg.cart) {
+      } else if (msg["cart"].length > 1 || msg["history"]) {
+        console.log("Hereeeeeeeeeeeeee");
         if (msg.input === "99") {
-          msg["history"] = msg.cart;
-          msg["cart"] = null;
+          msg["history"].push(msg.cart);
+          // msg["cart"] = null;
           socket.emit("admin-message", ["Order placed!!!", "Cheers!"]);
         } else if (msg.input === "98") {
-          socket.emit("admin-message", ["Order history!!!", "Cheers!"]);
+          if (msg.history.length === 0) {
+            socket.emit("admin-message", ["Oops", "Your history is empty!!!"]);
+          } else {
+            // socket.emit("admin-message", ["Order history!!!", "Cheers!"]);
+            socket.emit("admin-message", msg.history);
+          }
         } else if (msg.input === "97") {
-          socket.emit("admin-message", ["Current order:", msg.cart]);
+          socket.emit("admin-message", ["Current order:", msg.cart[-1]]);
         } else if (msg.input === "0") {
           socket.emit("admin-message", ["Order cancelled!!!", "Cheers!"]);
           msg.cart = null;
@@ -127,8 +142,8 @@ io.on("connection", (socket) => {
           ]);
           return;
         }
-      } else if (!msg.cart || !msg.history) {
-        socket.emit("admin-message", ["Oops", "Your cart/history is empty!!!"]);
+      } else if (!msg.cart && msg.input === "99") {
+        socket.emit("admin-message", ["Oops", "Your cart is empty!!!"]);
       }
     }
     socket.emit("saveToStorage", msg);

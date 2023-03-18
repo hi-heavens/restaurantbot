@@ -18,6 +18,11 @@ socket.on("admin-message", (message) => {
 //   response = message;
 });
 
+socket.on("history", (message) => {
+  displayMessage(message);
+//   response = message;
+});
+
 socket.on("userMessage", (message) => {
   displayUserMessage(message.input);
 });
@@ -70,5 +75,19 @@ function displayUserMessage(message) {
   <p id="item">
     ${message}
     </p>`;
+  document.querySelector("#chat-messages").appendChild(div);
+}
+
+function displayHistory(message) {
+  const div = document.createElement("div");
+  let list = "";
+  for (let i = 0; i < message.length; i++) {
+    list += `<li>${message[i]}</li>`;
+  }
+  div.classList.add("message");
+  div.innerHTML = `<p class="meta">Your Order history...</span></p>
+  <ul id="items">
+    ${list}
+    </ul>`;
   document.querySelector("#chat-messages").appendChild(div);
 }
