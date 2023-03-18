@@ -70,7 +70,7 @@ io.on("connection", (socket) => {
 
     let userMeal = {};
     if (session === msg.session) {
-      socket.emit("userMessage", msg);
+      socket.emit("userMessage", formatMessage("You", msg.input));
       if (msg.input === "1" && !msg.action) {
         msg["action"] = "subMenu";
         socket.emit("menu", formatMessage("admin", MENU));

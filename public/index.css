@@ -1,40 +1,60 @@
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: "Karla", sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Karla", sans-serif;
 }
 
 .main-container {
-    width: 60%;
-    margin: 0 auto;
+  width: 40%;
+  margin: 0 auto;
 }
 
 #chat-messages {
-    height: 500px;
-    border: 3px solid #ccc;
-    overflow: hidden;
-    overflow-y: scroll;
-    padding: 10px;
-    display: flex;
-    flex-direction: column;
-    border-top-right-radius: 10px;
-    border-bottom-left-radius: 10px;
+  height: 500px;
+  border: 3px solid #ccc;
+  overflow: hidden;
+  overflow-y: scroll;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  border-top-right-radius: 10px;
+  border-bottom-left-radius: 10px;
+  margin-bottom: 10px;
 }
 
 .message {
-    border: 1px solid #ccc;
-    width: 45%;
-    padding: 10px;
-    margin-bottom: 10px;
-    border-radius: 5px;
+  border: 1px solid #ccc;
+  min-width: 55%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 5px;
 }
 
 .items {
-    list-style: none;
-    line-height: 1.4rem;
+  list-style: none;
+  line-height: 1.4rem;
 }
 
 .message:nth-child(odd) {
-    background: red;
+  background: #d3ab9e;
+  align-self: flex-end;
+  color: #fffbff;
+}
+
+.message:nth-child(even) {
+    background: #ebd8d0;
+    align-self: flex-start;
+    color: black;
+    text-shadow: 0px 0px 2px #fffbff;
   }
+
+.meta {
+    margin-bottom: 10px;
+    font-size: 12px;
+    text-align: end;
+}
+
+.meta span {
+    font-style: italic;
+}

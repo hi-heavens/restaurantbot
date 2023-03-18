@@ -24,7 +24,7 @@ socket.on("history", (message) => {
 });
 
 socket.on("userMessage", (message) => {
-  displayUserMessage(message.input);
+  displayUserMessage(message);
 });
 
 socket.on("menu", (message) => {
@@ -85,9 +85,9 @@ function displayMessage(message) {
 function displayUserMessage(message) {
   const div = document.createElement("div");
   div.classList.add("message");
-  div.innerHTML = `<p class="meta">${"bot"} <span>${"time"}</span></p>
+  div.innerHTML = `<p class="meta">${message.username} <span>${message.time}</span></p>
   <p id="item">
-    ${message}
+    ${message.text}
     </p>`;
   document.querySelector("#chat-messages").appendChild(div);
 }
