@@ -50,13 +50,13 @@ h1 {
 
 .message:nth-child(odd) {
   background: #d3ab9e;
-  align-self: flex-end;
+  align-self: flex-start;
   color: #fffbff;
 }
 
 .message:nth-child(even) {
   background: #ebd8d0;
-  align-self: flex-start;
+  align-self: flex-end;
   color: black;
   text-shadow: 0px 0px 2px #fffbff;
 }

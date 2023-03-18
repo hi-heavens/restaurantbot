@@ -66,17 +66,16 @@ io.on("connection", (socket) => {
 
   socket.on("chatMessage", (msg) => {
     let userMealName = "";
-    let cart = [];
-
+    // let cart = [];
     let userMeal = {};
     if (session === msg.session) {
-      socket.emit("userMessage", formatMessage("You", msg.input));
+      socket.emit("admin-message", formatMessage("You", msg.input));
       if (msg.input === "1" && !msg.action) {
         msg["action"] = "subMenu";
         socket.emit("menu", formatMessage("admin", MENU));
-        console.log("Select menu item");
       } else if (msg.action === "subMenu" && !msg.checkOut) {
         userMealName = msg.MENU[parseInt(msg.input) - 1];
+        console.log(userMealName);
         userMeal = foodList[userMealName];
         // { special: [ true, 'fries', 100 ], amount: 500 }
         let isSpecial = userMeal["special"];
@@ -100,7 +99,7 @@ io.on("connection", (socket) => {
         socket.emit("admin-message", formatMessage("admin", toSelect));
         console.log("Sub menu item selected");
       } else if (msg.checkOut && msg.action === "subMenu") {
-        let cart = [];
+        // let cart = [];
         let cartItem = [msg.userMealName];
         let checkOutMessage = [
           `Cheers! ${msg.userMealName} has been put in your shopping cart...`,
@@ -127,28 +126,46 @@ io.on("connection", (socket) => {
         if (msg.input === "99") {
           msg["history"].push(msg.cart);
           // msg["cart"] = null;
-          socket.emit("admin-message", formatMessage("admin", ["Order placed!!!", "Cheers!"]));
+          socket.emit(
+            "admin-message",
+            formatMessage("admin", ["Order placed!!!", "Cheers!"])
+          );
         } else if (msg.input === "98") {
           if (msg.history.length === 0) {
-            socket.emit("admin-message", formatMessage("admin", ["Oops", "Your history is empty!!!"]));
+            socket.emit(
+              "admin-message",
+              formatMessage("admin", ["Oops", "Your history is empty!!!"])
+            );
           } else {
             // socket.emit("admin-message", ["Order history!!!", "Cheers!"]);
             socket.emit("admin-message", formatMessage("admin", msg.history));
           }
         } else if (msg.input === "97") {
-          socket.emit("admin-message", formatMessage("admin", ["Current order:", msg.cart[-1]]));
+          socket.emit(
+            "admin-message",
+            formatMessage("admin", ["Current order:", msg.cart[-1]])
+          );
         } else if (msg.input === "0") {
-          socket.emit("admin-message", formatMessage("admin", ["Order cancelled!!!", "Cheers!"]));
-          msg.cart = null;
+          socket.emit(
+            "admin-message",
+            formatMessage("admin", ["Order cancelled!!!", "Cheers!"])
+          );
+          msg.cart = "welcomeList";
         } else {
-          socket.emit("admin-message", formatMessage("admin", [
-            "Invalid input",
-            "Select 1 or 2 to continue",
-          ]));
+          socket.emit(
+            "admin-message",
+            formatMessage("admin", [
+              "Invalid input",
+              "Select 1 or 2 to continue",
+            ])
+          );
           return;
         }
       } else if (!msg.cart && msg.input === "99") {
-        socket.emit("admin-message", formatMessage("admin", ["Oops", "Your cart is empty!!!"]));
+        socket.emit(
+          "admin-message",
+          formatMessage("admin", ["Oops", "Your cart is empty!!!"])
+        );
       }
     }
     // msg.formatTime = formatTime();
